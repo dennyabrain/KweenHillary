@@ -158,10 +158,10 @@ def tweet():
         #else:
             #print word,
                 
-    print text  
+    #print text  
     #text=text.encode('utf8')
     newTweets.append(text)
-    print newTweets
+    #print newTweets
     #lower case
     newTweet = [x.lower() for x in newTweets]
     print "generated Tweet : %s"%newTweet
