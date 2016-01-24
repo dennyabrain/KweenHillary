@@ -1,6 +1,7 @@
 import twitter
 import os
 import emoji
+from pymongo import MongoClient
 
 # Twitter API keys go here
 CONSUMER_KEY = os.environ['CONSUMER_KEY']
@@ -9,6 +10,11 @@ CONSUMER_SECRET = os.environ['CONSUMER_SECRET']
 OAUTH_TOKEN = os.environ['OAUTH_TOKEN']
 OAUTH_TOKEN_SECRET = os.environ['OAUTH_TOKEN_SECRET']
 
+client = MongoClient('mongodb://heroku_980w3n73:tq6ghn78k9lbjfieqgpn2ii43d@ds049935.mongolab.com:49935/heroku_980w3n73')
+#collection=client['heroku_980w3n73']['tweet'].insert_one({'tweet_id':'123456'})
+
+lastTweetId = client['heroku_980w3n73']['tweet'].find_one()
+print lastTweetId['tweet_id']
 
 auth = twitter.oauth.OAuth(OAUTH_TOKEN, OAUTH_TOKEN_SECRET,
                            CONSUMER_KEY, CONSUMER_SECRET)
@@ -96,15 +102,16 @@ hillary_dict = {'Hillary':'Kween H',
 "veterans,":"dope veterans,"}
 
 hillary_tweets= twitter_api.statuses.user_timeline(screen_name="HillaryClinton",count=1,exlude_replies='true',include_rts='false')
-currentTweet = hillary_tweets[0]['text']
-print 'currentTweet is %s : '%currentTweet
+currentTweetId = hillary_tweets[0]['id']
+#print 'currentTweet id is %s : '%hillary_tweets[0]['id']
 
 millenialhillary_tweets= twitter_api.statuses.user_timeline(screen_name="KweenHillary",count=1,exlude_replies='true',include_rts='false')
 currentmillenialTweet = millenialhillary_tweets[0]['text']
 print 'currentmillenialTweet is : %s'%currentmillenialTweet
 
-#if currentTweet == currentmillenialTweet:
-#    exit
+if currentTweetId == lastTweetId:
+    print 'same tweet as last one. exiting...'
+    exit
 
 #import emoji library and dict
 f = open('emoji_dict.txt')
@@ -164,5 +171,4 @@ else:
     print 'tweeting finally'   
     #tweet it
     #twitter_api.statuses.update(status=text)
-
 
