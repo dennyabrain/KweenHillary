@@ -6,9 +6,9 @@ from HillaryBot import tweet
 q = Queue(connection=conn)
 sched = BlockingScheduler()
 
-@sched.scheduled_job('interval', minutes=1)
+@sched.scheduled_job('interval', hour=1)
 def OneMinuteClock():
-	print('this job runs every 1 minute')
+	print('this job runs every 1 hour')
 	result = q.enqueue(tweet)
 
 sched.start()
